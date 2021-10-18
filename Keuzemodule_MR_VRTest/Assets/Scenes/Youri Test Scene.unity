@@ -216,7 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37a333380dc38f94b94f135ef3a27103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camerNum: 2
+  camerNum: 1
 --- !u!1 &856617176
 GameObject:
   m_ObjectHideFlags: 0
