@@ -5,8 +5,9 @@ using UnityEngine.Events;
 
 public class GlyphButton : MonoBehaviour
 {
-
-    private List<GameObject> InputObjects = new List<GameObject>();
+    [SerializeField] private GlyphButton AnderHand;
+    private Animator _Button = new Animator();
+    public List<GameObject> InputObjects = new List<GameObject>();
     [SerializeField] private List<GameObject> CorrectOrder;
     public UnityEvent Correct = new UnityEvent();
     private UnityEvent InCorrect = new UnityEvent();
@@ -19,17 +20,23 @@ public class GlyphButton : MonoBehaviour
         {
             InCorrect.AddListener(buttons[i].GetComponent<ActiveBoxColider>().EnableCollider);
         }
+        InCorrect.AddListener(gameObject.GetComponent<GlyphButton>().ResetHand);
+        InCorrect.AddListener(AnderHand.ResetHand);
     }
 
-    void Update()
+    public void ResetHand()
     {
-        
+        gameObject.GetComponent<SphereCollider>().enabled = true;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("HITTT");
+        if (other.gameObject.CompareTag("button"))
+        {
+            Debug.Log("HITTT");
 
+            _Button = other.gameObject.GetComponent<Animator>();
+            _Button.SetTrigger("ButtonPressed");
             InputObjects.Add(other.gameObject);
             other.gameObject.GetComponent<BoxCollider>().enabled = false;
 
@@ -48,6 +55,7 @@ public class GlyphButton : MonoBehaviour
                 {
                     Debug.Log("LITTT");
                     Correct.Invoke();
+                    gameObject.GetComponent<SphereCollider>().enabled = false;
                 }
                 else
                 {
@@ -55,7 +63,9 @@ public class GlyphButton : MonoBehaviour
                     Debug.Log("WRONG");
                 }
                 InputObjects.Clear();
+                AnderHand.InputObjects.Clear();
             }
+        }
         
     }
 }
